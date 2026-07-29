@@ -1,0 +1,113 @@
+{
+  "format": {
+    "timeFormat": "HH:mm",
+    "dataViewSyntax": false
+  },
+  "calendars": {
+    "Social": {
+      "icsName": "Social",
+      "icsUrl": "https://p141-caldav.icloud.com/published/2/MjIzNzMzMDM2OTQyMjM3MsTUGs9VU_91EbHJAUiHgRBCppZsPWtu68RFN_0JIcnogbwYKsCh4iJ8Ep2IxD1qzW7QNV5YbDecS46D-rXWuFU",
+      "ownerEmail": "",
+      "format": {
+        "checkbox": true,
+        "includeEventEndTime": true,
+        "icsName": true,
+        "summary": true,
+        "location": true,
+        "description": false,
+        "calendarType": "remote",
+        "showAttendees": false,
+        "showOngoing": true,
+        "showTransparentEvents": false
+      },
+      "calendarType": "remote"
+    },
+    "work": {
+      "icsName": "work",
+      "icsUrl": "https://p141-caldav.icloud.com/published/2/MjIzNzMzMDM2OTQyMjM3MsTUGs9VU_91EbHJAUiHgRCy6GTR3fCRRERru05T1AToOfyVGptSK_pQzKCLcFeL7i-wB2iPcyy4hl3YH2161Ig",
+      "ownerEmail": "",
+      "format": {
+        "checkbox": true,
+        "includeEventEndTime": true,
+        "icsName": true,
+        "summary": true,
+        "location": true,
+        "description": false,
+        "calendarType": "remote",
+        "showAttendees": false,
+        "showOngoing": true,
+        "showTransparentEvents": false
+      },
+      "calendarType": "remote"
+    },
+    "todo": {
+      "icsName": "todo",
+      "icsUrl": "https://p141-caldav.icloud.com/published/2/MjIzNzMzMDM2OTQyMjM3MsTUGs9VU_91EbHJAUiHgRBAwGO0Wz6blEi-7jhhoMcH6XI706a5cv_Yel5Y629D-FNE_bEjP2SiT6Omr2TtbhE",
+      "ownerEmail": "",
+      "format": {
+        "checkbox": true,
+        "includeEventEndTime": true,
+        "icsName": true,
+        "summary": true,
+        "location": true,
+        "description": false,
+        "calendarType": "remote",
+        "showAttendees": false,
+        "showOngoing": true,
+        "showTransparentEvents": false
+      },
+      "calendarType": "remote"
+    },
+    "holidays": {
+      "icsName": "holidays",
+      "icsUrl": "https://p141-caldav.icloud.com/published/2/MjIzNzMzMDM2OTQyMjM3MsTUGs9VU_91EbHJAUiHgRCd8RrKytLPvzRkyDm-iHKuNDK0D1YWCUgfEUXwVx4vkNJmD2ohauw6UDOD6w-66KM",
+      "ownerEmail": "",
+      "format": {
+        "checkbox": true,
+        "includeEventEndTime": true,
+        "icsName": true,
+        "summary": true,
+        "location": true,
+        "description": false,
+        "calendarType": "remote",
+        "showAttendees": false,
+        "showOngoing": true,
+        "showTransparentEvents": false
+      },
+      "calendarType": "remote"
+    }
+  },
+  "fieldExtraction": {
+    "enabled": true,
+    "patterns": [
+      {
+        "name": "Google Meet",
+        "pattern": "GOOGLE-CONFERENCE",
+        "matchType": "contains",
+        "priority": 1,
+        "extractedFieldName": "Video Call URLs"
+      },
+      {
+        "name": "Zoom",
+        "pattern": "zoom.us",
+        "matchType": "contains",
+        "priority": 2,
+        "extractedFieldName": "Video Call URLs"
+      },
+      {
+        "name": "Skype",
+        "pattern": "https:\\/\\/join\\.skype\\.com\\/[a-zA-Z0-9]+",
+        "matchType": "regex",
+        "priority": 3,
+        "extractedFieldName": "Video Call URLs"
+      },
+      {
+        "name": "Microsoft Teams",
+        "pattern": "https:\\/\\/teams\\.microsoft\\.com\\/l\\/meetup-join\\/[^>]+",
+        "matchType": "regex",
+        "priority": 4,
+        "extractedFieldName": "Video Call URLs"
+      }
+    ]
+  }
+}

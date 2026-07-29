@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Food/Meal Plan.md",
-                "mode": "source",
+                "file": "Daily/2026-08-03.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Meal Plan"
+              "title": "2026-08-03"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 232.5
   },
   "right": {
     "id": "db8c904e3866fadc",
@@ -207,13 +207,50 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "templater-obsidian:Templater": false,
-      "obsidian-git:Open Git source control": false
+      "obsidian-git:Open Git source control": false,
+      "full-calendar-remastered:FCR Command": false,
+      "full-calendar-remastered:Open Full Calendar": false
     }
   },
-  "active": "ebbf2e0af2a9a301",
+  "active": "1e30724286436933",
   "lastOpenFiles": [
+    "README.md",
+    "Daily/2026-07-31.md",
+    "Daily/2026-07-29.md",
+    "Daily/2026-08-02.md",
+    "src/verify-bundle.mjs",
+    "_system/scripts/dailyCalendar.js",
+    "_system/scripts",
+    "_system/templates/Startup Sync Week.md",
+    "_system/templates/Daily Note.md",
+    "_system/templates",
+    "_system",
+    "src/styles/hide-tooling-folders.css",
+    "src/styles/daily-note-layout.css",
+    "src/styles",
+    "src/scripts/daily-calendar/main.ts",
+    "src/scripts/daily-calendar/note.ts",
+    "node_modules/@typescript/typescript-darwin-arm64/README.md",
+    "node_modules/typescript/README.md",
+    "node_modules/@esbuild/darwin-arm64/README.md",
+    "node_modules/typescript/vendor/vscode-jsonrpc/README.md",
+    "node_modules/style-mod/README.md",
+    "node_modules/style-mod/src/README.md",
+    "node_modules/@codemirror/state/README.md",
+    "node_modules/@codemirror/state/CHANGELOG.md",
+    "node_modules/@codemirror/view/README.md",
+    "node_modules/@codemirror/view/CHANGELOG.md",
+    "node_modules/@types/tern/README.md",
+    "node_modules/@types/codemirror/README.md",
+    "node_modules/moment/README.md",
+    "node_modules/moment/CHANGELOG.md",
+    "node_modules/esbuild/README.md",
+    "node_modules/esbuild/LICENSE.md",
+    "node_modules/crelt/README.md",
+    "node_modules/obsidian/README.md",
+    "node_modules/obsidian/LICENSE.md",
+    "node_modules/obsidian/CHANGELOG.md",
     "Untitled 1.canvas",
-    "Food/Meal Plan.md",
     "Untitled.canvas"
   ]
 }

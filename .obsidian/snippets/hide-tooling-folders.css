@@ -1,0 +1,13 @@
+/*
+ * Keeps build tooling out of the file explorer. Obsidian only dims folders
+ * listed under Settings → Files and links → Excluded files, so the folders are
+ * removed from the tree here instead.
+ */
+
+.nav-files-container .nav-folder:has(> .nav-folder-title[data-path="_system"]),
+.nav-files-container .nav-folder:has(> .nav-folder-title[data-path="src"]),
+.nav-files-container .nav-folder:has(> .nav-folder-title[data-path=".githooks"]),
+.nav-files-container .nav-folder:has(> .nav-folder-title[data-path="node_modules"]),
+.nav-files-container .nav-file:has(> .nav-file-title[data-path="README.md"]) {
+  display: none;
+}

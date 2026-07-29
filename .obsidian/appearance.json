@@ -3,5 +3,9 @@
   "cssTheme": "AnuPpuccin",
   "baseFontSize": 16,
   "translucency": false,
-  "theme": "moonstone"
+  "theme": "moonstone",
+  "enabledCssSnippets": [
+    "daily-note-layout",
+    "hide-tooling-folders"
+  ]
 }

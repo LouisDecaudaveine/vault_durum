@@ -1,0 +1,28 @@
+#!/bin/sh
+# Keeps committed build output in sync with src/. Activate with:
+#   npm run hooks:install
+set -e
+
+# The Obsidian Git plugin commits without a full shell environment, and
+# isomorphic-git skips hooks entirely. Don't block those commits.
+if ! command -v npm >/dev/null 2>&1; then
+  echo "pre-commit: npm not found, skipping checks"
+  exit 0
+fi
+
+npm run --silent check
+
+ARTIFACTS="_system/scripts .obsidian/snippets"
+
+CHANGED=$(git diff --name-only -- $ARTIFACTS)
+UNTRACKED=$(git ls-files --others --exclude-standard -- $ARTIFACTS)
+UNSTAGED=$(printf '%s\n%s\n' "$CHANGED" "$UNTRACKED" | grep -v '^$' || true)
+
+if [ -n "$UNSTAGED" ]; then
+  echo
+  echo "pre-commit: build output is not staged. Rebuilt files:"
+  echo "$UNSTAGED" | sed 's/^/  /'
+  echo
+  echo "  git add $ARTIFACTS"
+  exit 1
+fi

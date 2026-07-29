@@ -1,0 +1,20 @@
+{
+  "name": "vault-durum",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Obsidian vault automation: Templater user scripts and CSS snippets authored in TypeScript.",
+  "type": "module",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "dev": "node src/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "verify": "node src/verify-bundle.mjs",
+    "hooks:install": "git config core.hooksPath .githooks",
+    "check": "npm run typecheck && npm run build && npm run verify"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "obsidian": "^1.13.1",
+    "typescript": "^7.0.2"
+  }
+}

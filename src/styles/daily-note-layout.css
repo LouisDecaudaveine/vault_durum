@@ -1,0 +1,139 @@
+/* Two-column daily note: free-form content left, generated day calendar right. */
+
+.daily-note-layout {
+  display: flex;
+  gap: 1.75rem;
+  align-items: flex-start;
+  margin-top: 0.5rem;
+}
+
+.daily-left {
+  flex: 1 1 55%;
+  min-width: 0;
+}
+
+.daily-right {
+  flex: 0 0 340px;
+  max-width: 42%;
+  position: sticky;
+  top: 1rem;
+}
+
+.day-calendar {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  background: var(--background-secondary);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.day-calendar-allday {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: var(--background-primary-alt);
+}
+
+.day-calendar-inner {
+  display: flex;
+  position: relative;
+}
+
+.day-calendar-labels {
+  width: 3.1rem;
+  flex-shrink: 0;
+  position: relative;
+  background: var(--background-primary-alt);
+  border-right: 1px solid var(--background-modifier-border);
+}
+
+.day-calendar-label {
+  position: absolute;
+  left: 0;
+  right: 0.35rem;
+  text-align: right;
+  transform: translateY(-50%);
+  font-size: 0.68rem;
+  line-height: 1;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-calendar-grid {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+
+.day-calendar-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--background-modifier-border);
+  opacity: 0.65;
+}
+
+.day-calendar-event {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  border-radius: 6px;
+  padding: 0.28rem 0.45rem;
+  border-left: 3px solid;
+  overflow: hidden;
+  z-index: 1;
+  box-sizing: border-box;
+  line-height: 1.25;
+}
+
+.day-calendar-event--all-day {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  height: auto;
+}
+
+.day-calendar-event-time {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-calendar-event-title {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.day-calendar-event-location,
+.day-calendar-event-cal {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .daily-note-layout {
+    flex-direction: column;
+  }
+
+  .daily-right {
+    flex: 1 1 auto;
+    max-width: 100%;
+    width: 100%;
+    position: static;
+  }
+}

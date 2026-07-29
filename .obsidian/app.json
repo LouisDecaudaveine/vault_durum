@@ -1,1 +1,8 @@
-{}
+{
+  "userIgnoreFilters": [
+    "_system/",
+    "src/",
+    "node_modules/",
+    "README.md"
+  ]
+}
