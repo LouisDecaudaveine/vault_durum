@@ -31,21 +31,8 @@ var DAILY_FOLDER = "Daily";
 var DAILY_DATE_FORMAT = "YYYY-MM-DD";
 var TITLE_FORMAT = "dddd, MMMM D, YYYY";
 var SYNC_DAYS = 7;
-var DAY_START_HOUR = 7;
-var DAY_END_HOUR = 23;
-var HOUR_HEIGHT_PX = 48;
 var CALENDAR_BLOCK_START = "<!-- calendar-auto -->";
 var CALENDAR_BLOCK_END = "<!-- /calendar-auto -->";
-var CALENDAR_COLORS = {
-  Social: { bg: "rgba(235, 120, 154, 0.28)", border: "#eb789a" },
-  work: { bg: "rgba(99, 145, 235, 0.28)", border: "#6391eb" },
-  todo: { bg: "rgba(99, 200, 130, 0.28)", border: "#63c882" },
-  holidays: { bg: "rgba(180, 120, 235, 0.28)", border: "#b478eb" }
-};
-var DEFAULT_CALENDAR_COLOR = {
-  bg: "rgba(140, 140, 160, 0.28)",
-  border: "#8c8ca0"
-};
 
 // src/types/ics.ts
 function getPlugins(app) {
@@ -96,126 +83,76 @@ function groupByPlacement(date, events) {
 var CALENDAR_BLOCK_PATTERN = new RegExp(
   `${CALENDAR_BLOCK_START}[\\s\\S]*?${CALENDAR_BLOCK_END}`
 );
-var DEFAULT_LEFT_BODY = `## Notes
+var DEFAULT_BODY = `## Notes
 
 ## Todos
 
 - [ ] `;
-function buildDailyNote(date, calendarHtml, leftBody = DEFAULT_LEFT_BODY) {
+function buildDailyNote(date, calendarBlock, body = DEFAULT_BODY) {
   return `# ${date.format(TITLE_FORMAT)}
 
-<div class="daily-note-layout">
-
-<div class="daily-left">
-
-${leftBody.trim()}
-
-</div>
-
-<div class="daily-right">
-
 ${CALENDAR_BLOCK_START}
-${calendarHtml}
+${calendarBlock}
 ${CALENDAR_BLOCK_END}
 
-</div>
-
-</div>
+${body.trim()}
 `;
 }
 function hasCalendarBlock(content) {
   return CALENDAR_BLOCK_PATTERN.test(content);
 }
-function replaceCalendarBlock(content, calendarHtml) {
+function replaceCalendarBlock(content, calendarBlock) {
   return content.replace(
     CALENDAR_BLOCK_PATTERN,
     `${CALENDAR_BLOCK_START}
-${calendarHtml}
+${calendarBlock}
 ${CALENDAR_BLOCK_END}`
   );
 }
 function unmanagedBody(content) {
-  const body = content.split("\n").filter((line) => !line.startsWith("# ")).join("\n").trim();
-  return body.length > 0 ? body : DEFAULT_LEFT_BODY;
-}
-
-// src/scripts/daily-calendar/layout.ts
-var MINUTES_PER_HOUR = 60;
-var MIN_EVENT_MINUTES = 15;
-var MIN_EVENT_HEIGHT_PERCENT = 4;
-var dayStartMinute = DAY_START_HOUR * MINUTES_PER_HOUR;
-var dayEndMinute = DAY_END_HOUR * MINUTES_PER_HOUR;
-var daySpanMinutes = dayEndMinute - dayStartMinute;
-function offsetPercent(minuteOfDay) {
-  return (minuteOfDay - dayStartMinute) / daySpanMinutes * 100;
-}
-function hourOffsetPercent(hour) {
-  return offsetPercent(hour * MINUTES_PER_HOUR);
-}
-function placeEvent(startMinute, endMinute) {
-  const start = Math.max(dayStartMinute, Math.min(startMinute, dayEndMinute));
-  const end = Math.max(start + MIN_EVENT_MINUTES, Math.min(endMinute, dayEndMinute));
-  return {
-    topPercent: offsetPercent(start),
-    heightPercent: Math.max(
-      (end - start) / daySpanMinutes * 100,
-      MIN_EVENT_HEIGHT_PERCENT
-    )
-  };
-}
-function gridHeightPx(hourHeightPx) {
-  return (DAY_END_HOUR - DAY_START_HOUR) * hourHeightPx;
-}
-function visibleHours() {
-  const hours = [];
-  for (let hour = DAY_START_HOUR; hour <= DAY_END_HOUR; hour++) {
-    hours.push(hour);
-  }
-  return hours;
+  const body = content.split("\n").filter((line) => !line.startsWith("# ")).join("\n").replace(CALENDAR_BLOCK_PATTERN, "").trim();
+  return body.length > 0 ? body : DEFAULT_BODY;
 }
 
 // src/scripts/daily-calendar/render.ts
-function escapeHtml(value) {
-  return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+var FALLBACK = `> [!summary]+ Nothing scheduled
+> Your day is wide open.`;
+function calloutType(calendarName) {
+  return `calendar-${calendarName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 }
-function colorFor(event) {
-  return CALENDAR_COLORS[event.icsName ?? ""] ?? DEFAULT_CALENDAR_COLOR;
-}
-function timeLabel(event) {
+function formatTime(event) {
+  if (!event.time) return "";
   const end = event.endTime && event.endTime !== event.time ? ` \u2013 ${event.endTime}` : "";
-  return escapeHtml(`${event.time}${end}`);
+  return `**${event.time}${end}**`;
 }
-function renderAllDayRow(events) {
-  if (events.length === 0) return "";
-  const items = events.map((event) => {
-    const color = colorFor(event);
-    const calendar = event.icsName ? `<span class="day-calendar-event-cal">${escapeHtml(event.icsName)}</span>` : "";
-    return `<div class="day-calendar-event day-calendar-event--all-day" style="background:${color.bg};border-left-color:${color.border};"><span class="day-calendar-event-title">${escapeHtml(event.summary)}</span>${calendar}</div>`;
-  });
-  return `<div class="day-calendar-allday">${items.join("")}</div>`;
+function renderEvent(event) {
+  const time = formatTime(event);
+  const location = event.location ? ` \xB7 _${event.location}_` : "";
+  return time ? `> - ${time} ${event.summary}${location}` : `> - ${event.summary}${location}`;
 }
-function renderHourLabels() {
-  const labels = visibleHours().map((hour) => {
-    const label = `${String(hour).padStart(2, "0")}:00`;
-    return `<span class="day-calendar-label" style="top:${hourOffsetPercent(hour)}%;">${label}</span>`;
-  });
-  return `<div class="day-calendar-labels">${labels.join("")}</div>`;
-}
-function renderGrid({ timed }) {
-  const lines = visibleHours().map(
-    (hour) => `<div class="day-calendar-grid-line" style="top:${hourOffsetPercent(hour)}%;"></div>`
-  );
-  const events = timed.map(({ event, startMinute, endMinute }) => {
-    const { topPercent, heightPercent } = placeEvent(startMinute, endMinute);
-    const color = colorFor(event);
-    const location = event.location ? `<span class="day-calendar-event-location">${escapeHtml(event.location)}</span>` : "";
-    return `<div class="day-calendar-event" style="top:${topPercent}%;height:${heightPercent}%;background:${color.bg};border-left-color:${color.border};" title="${escapeHtml(event.summary)}"><span class="day-calendar-event-time">${timeLabel(event)}</span><span class="day-calendar-event-title">${escapeHtml(event.summary)}</span>${location}</div>`;
-  });
-  return `<div class="day-calendar-grid">${lines.join("")}${events.join("")}</div>`;
+function renderCalendarGroup(calendarName, events) {
+  const type = calloutType(calendarName);
+  const header = `> [!${type}]+ ${calendarName}`;
+  const items = events.map(renderEvent).join("\n");
+  return `${header}
+${items}`;
 }
 function renderDayCalendar(date, events) {
   const grouped = groupByPlacement(date, events);
-  return `<div class="day-calendar">` + renderAllDayRow(grouped.allDay) + `<div class="day-calendar-inner" style="height:${gridHeightPx(HOUR_HEIGHT_PX)}px;">` + renderHourLabels() + renderGrid(grouped) + `</div></div>`;
+  const allEvents = [...grouped.allDay, ...grouped.timed.map((t) => t.event)];
+  if (allEvents.length === 0) return FALLBACK;
+  const byCalendar = /* @__PURE__ */ new Map();
+  for (const event of allEvents) {
+    const name = event.icsName ?? "Other";
+    const list = byCalendar.get(name) ?? [];
+    list.push(event);
+    byCalendar.set(name, list);
+  }
+  const sections = [];
+  for (const [calendarName, calEvents] of byCalendar) {
+    sections.push(renderCalendarGroup(calendarName, calEvents));
+  }
+  return sections.join("\n\n");
 }
 
 // src/scripts/daily-calendar/main.ts
@@ -225,16 +162,16 @@ async function ensureFolder(app, path) {
   if (app.vault.getFolderByPath(path)) return;
   await app.vault.createFolder(path);
 }
-async function writeDay(app, date, calendarHtml) {
+async function writeDay(app, date, calendarBlock) {
   const path = `${DAILY_FOLDER}/${date.format(DAILY_DATE_FORMAT)}.md`;
   const file = app.vault.getFileByPath(path);
   if (!file) {
-    await app.vault.create(path, buildDailyNote(date, calendarHtml));
+    await app.vault.create(path, buildDailyNote(date, calendarBlock));
     return;
   }
   await app.vault.process(
     file,
-    (data) => hasCalendarBlock(data) ? replaceCalendarBlock(data, calendarHtml) : buildDailyNote(date, calendarHtml, unmanagedBody(data))
+    (data) => hasCalendarBlock(data) ? replaceCalendarBlock(data, calendarBlock) : buildDailyNote(date, calendarBlock, unmanagedBody(data))
   );
 }
 async function renderDailyNote(tp, fileTitle) {

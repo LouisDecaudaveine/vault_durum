@@ -5,13 +5,6 @@ export const TITLE_FORMAT = "dddd, MMMM D, YYYY";
 /** Number of days (including today) refreshed by `syncWeek`. */
 export const SYNC_DAYS = 7;
 
-/** Visible time window of the day grid. */
-export const DAY_START_HOUR = 7;
-export const DAY_END_HOUR = 23;
-
-/** Rendered height of a single hour row. */
-export const HOUR_HEIGHT_PX = 48;
-
 /** Markers delimiting the generated block, so hand-written content survives a resync. */
 export const CALENDAR_BLOCK_START = "<!-- calendar-auto -->";
 export const CALENDAR_BLOCK_END = "<!-- /calendar-auto -->";

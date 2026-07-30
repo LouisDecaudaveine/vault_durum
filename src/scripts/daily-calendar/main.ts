@@ -21,19 +21,19 @@ async function ensureFolder(app: App, path: string): Promise<void> {
   await app.vault.createFolder(path);
 }
 
-async function writeDay(app: App, date: Moment, calendarHtml: string): Promise<void> {
+async function writeDay(app: App, date: Moment, calendarBlock: string): Promise<void> {
   const path = `${DAILY_FOLDER}/${date.format(DAILY_DATE_FORMAT)}.md`;
   const file = app.vault.getFileByPath(path);
 
   if (!file) {
-    await app.vault.create(path, buildDailyNote(date, calendarHtml));
+    await app.vault.create(path, buildDailyNote(date, calendarBlock));
     return;
   }
 
   await app.vault.process(file, (data) =>
     hasCalendarBlock(data)
-      ? replaceCalendarBlock(data, calendarHtml)
-      : buildDailyNote(date, calendarHtml, unmanagedBody(data))
+      ? replaceCalendarBlock(data, calendarBlock)
+      : buildDailyNote(date, calendarBlock, unmanagedBody(data))
   );
 }
 

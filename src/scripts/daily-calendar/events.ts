@@ -40,7 +40,7 @@ export async function fetchEvents(plugin: IcsPlugin, date: Moment): Promise<IcsE
   return [...events].sort((a, b) => Number(a.utime) - Number(b.utime));
 }
 
-/** Splits events into all-day entries and grid-positioned timed entries. */
+/** Splits events into all-day entries and timed entries. */
 export function groupByPlacement(date: Moment, events: IcsEvent[]): DayEvents {
   const moment = window.moment;
   const dayStart = date.clone().startOf("day");
@@ -56,7 +56,6 @@ export function groupByPlacement(date: Moment, events: IcsEvent[]): DayEvents {
     const start = moment.unix(Number(event.utime));
     const end = moment.unix(Number(event.endUtime ?? event.utime));
 
-    // Multi-day events are reported on each day they span.
     if (!start.isSame(date, "day") && !end.isSame(date, "day")) continue;
 
     const startMinute = start.diff(dayStart, "minutes");
